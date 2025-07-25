@@ -1,78 +1,42 @@
-import { FaHeart, FaShareAlt, FaPlay } from 'react-icons/fa';
+import { useEffect, useRef } from 'react';
 
 export default function ReleaseCard({ cover, title, band, date, lyrics }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = cover;
+    img.onload = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      // overlay
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.fillRect(0, canvas.height - 70, canvas.width, 70);
+
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 16px Orbitron';
+      ctx.fillText(title, 10, canvas.height - 50);
+      ctx.font = '14px Cinzel';
+      ctx.fillText(`${band} • ${date}`, 10, canvas.height - 30);
+      ctx.font = '12px Cinzel';
+      ctx.fillText(lyrics, 10, canvas.height - 12);
+    };
+  }, [cover, title, band, date, lyrics]);
+
   return (
     <div style={cardStyle}>
-      <img src={cover} alt={title} style={imageStyle} />
-      <div style={infoStyle}>
-        <h3 style={titleStyle}>{title}</h3>
-        <p style={bandStyle}>{band}</p>
-        <small style={dateStyle}>{date}</small>
-        <p style={lyricStyle}>{lyrics}</p>
-        <div style={iconRow}>
-          <FaHeart style={iconStyle} />
-          <FaShareAlt style={iconStyle} />
-          <FaPlay style={iconStyle} />
-        </div>
-      </div>
+      <canvas ref={canvasRef} width={300} height={300}></canvas>
     </div>
   );
 }
 
 const cardStyle = {
-  background: 'var(--gray-medium)',
-  padding: '0.8rem',          // less padding inside the card
-  borderRadius: '8px',
-  width: '300px',
-  color: 'var(--text-white)',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  margin: '0 auto'            // center each card
-};
-
-const imageStyle = {
   width: '300px',
   height: '300px',
-  objectFit: 'cover',
-  border: '2px solid var(--accent-pink)',
-  marginBottom: '0.3rem'      // less space below the image
-};
-
-const infoStyle = {
-  textAlign: 'center'
-};
-
-const titleStyle = {
-  margin: '0.3rem 0',
-  fontFamily: 'var(--font-heading)',
-  color: 'var(--accent-pink)'
-};
-
-const bandStyle = {
-  margin: 0,
-  fontFamily: 'var(--font-body)'
-};
-
-const dateStyle = {
-  color: 'var(--gray-light)'
-};
-
-const lyricStyle = {
-  fontStyle: 'italic',
-  fontSize: '0.9rem',
-  color: 'var(--accent-pink)'
-};
-
-const iconRow = {
-  display: 'flex',
-  justifyContent: 'center',
-  gap: '1rem',                // reduced spacing between icons
-  marginTop: '0.3rem'
-};
-
-const iconStyle = {
-  cursor: 'pointer',
-  fontSize: '1.3rem',
-  transition: '0.3s'
+  borderRadius: '8px',
+  overflow: 'hidden',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
 };
