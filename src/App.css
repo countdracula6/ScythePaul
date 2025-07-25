@@ -1,0 +1,21 @@
+/* src/App.css */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-dark);
+}
+
+.header {
+  flex-shrink: 0;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background: var(--bg-dark);
+}
+
+footer {
+  flex-shrink: 0;
+}
